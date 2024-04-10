@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import Navbar from '@/components/common/navbar'
 import NavbarMb from '@/components/common/navbar-mb'
 import Footer from '@/components/common/footer'
-//試抓資料區
 import Card from '@/components/lesson/lesson-card'
 import Cardrwd from '@/components/lesson/lesson-card-rwd'
 // import Lesson from '@/data/Lesson.json'
@@ -135,21 +134,18 @@ export default function LessonList({}) {
           return response.json()
         })
         .then((result) => {
-          // 将 result 每 perPage 条记录分成一页一页的数组
+          // 將 result 每 perPage 記錄分成一頁一頁的陣列
           const pages = result.reduce((acc, current, index) => {
-            const tempPage = Math.floor(index / perPage) // 当前记录所在的页码
+            const tempPage = Math.floor(index / perPage) // 記錄當前所在的頁碼
             if (!acc[tempPage]) {
-              acc[tempPage] = [] // 如果该页不存在，则创建一个新的页数组
+              acc[tempPage] = [] // 如果該頁不存在，則創建一個新的陣列
             }
-            acc[tempPage].push(current) // 将当前记录添加到相应的页数组中
+            acc[tempPage].push(current) // 將當前記錄添加到相應的陣列中
             return acc
           }, [])
           setTotalPage(pages.length)
-          setLessonArray(pages[currentPage]) // 将分页后的结果传递给 resolve
+          setLessonArray(pages[currentPage]) // 將分頁後的結果設定回渲染頁面的資料
           console.log(LessonArray)
-
-          setLessonArray(pages[currentPage]) // 将分页后的结果传递给 resolve
-          console.log(pages[currentPage])
         })
         .catch((error) => {
           console.log(error)
@@ -167,7 +163,7 @@ export default function LessonList({}) {
     //   console.log(currentPage)
   }
 
-  // 在组件中定义 isFiltered 状态，并提供一个函数来更新它的值
+  // 定義 isFiltered 狀態，並提供一個函數來更新它的值
   const [isFiltered, setIsFiltered] = useState(false)
   //-----------所有過濾資料功能傳回來的地方
 
@@ -194,45 +190,26 @@ export default function LessonList({}) {
   //   課程評價篩選
   const scoreState = ['all', '5', '4', '3']
   const [score, setScore] = useState('all')
-  const [confirmClicked, setConfirmClicked] = useState(false) // 新状态来跟踪确认按钮点击
-  //   当点击确认按钮时触发的useEffect
-    useEffect(() => {
-      if (score === 'all') {
-        setData(LessonArray)
-      } else {
-        const scoreNum = parseInt(score, 10)
-        const filtered = LessonArray.filter(
-          (lesson) => Math.round(lesson.average_rating) === scoreNum
-        )
-        setData(filtered)
-        setIsFiltered(true)
-      }
-      setConfirmClicked(false) // 处理完后重置确认按钮的点击状态
-    }, [confirmClicked]) // 依赖于确认按钮点击状态
+  const [confirmClicked, setConfirmClicked] = useState(false) // 追蹤確認按鈕點擊
+  //   當點擊確認按鈕時觸發的useEffect
+  useEffect(() => {
+    if (score === 'all') {
+      setData(LessonArray)
+    } else {
+      const scoreNum = parseInt(score, 10)
+      const filtered = LessonArray.filter(
+        (lesson) => Math.round(lesson.average_rating) === scoreNum
+      )
+      setData(filtered)
+      setIsFiltered(true)
+    }
+    setConfirmClicked(false) // 處理完後重置確認按鈕的點擊狀態
+  }, [confirmClicked]) // 依賴確認按鈕點擊狀態
 
   // 促銷課程篩選
   const [sales, setSales] = useState(false)
 
-  // 监听confirmClicked变化，执行筛选逻辑
-  // useEffect(() => {
-  //   if (confirmClicked) {
-  //     if (sales == true) {
-  //       // 筛选促销课程
-  //       const salesCourses = LessonArray.filter(
-  //         (lesson) => lesson.discount_state == 1
-  //       )
-  //       setData(salesCourses)
-  //       setIsFiltered(true)
-  //     } else {
-  //       // 不筛选，显示所有课程
-  //       setData(LessonArray)
-  //     }
-  //     // 重置confirmClicked状态以便下次点击
-  //     setConfirmClicked(false)
-  //   }
-  // }, [confirmClicked, sales]) // 添加sales作为依赖项，确保筛选逻辑正确执行
-
-  // 点击确认按钮的处理函数
+  // 點擊確認按鈕的處理函數
   const handleConfirmClick = () => {
     setConfirmClicked(true)
     console.log(confirmClicked)
@@ -354,15 +331,15 @@ export default function LessonList({}) {
   }, [selectedCategory])
 
   //-------------------選定特定分類後 熱門課程消失 //FIXME回到原始url熱門課程出不來
-  const { category } = useParams() // 从URL参数中获取category值
-  const [showHotCourses, setShowHotCourses] = useState(true) // 控制是否显示热门课程部分
+  const { category } = useParams() // 從URL參數中取得category值
+  const [showHotCourses, setShowHotCourses] = useState(true) // 控制是否顯示熱門課程
 
   useEffect(() => {
-    //   如果URL中存在category参数，则隱藏热门课程部分
+    //   如果URL中存在category參數，則隱藏熱門課程
     if ('all') {
       setShowHotCourses(false)
     } else {
-      // 否则顯示热门课程部分
+      // 否則顯示熱門課程
       setShowHotCourses(true)
     }
     console.log(showHotCourses)
@@ -512,7 +489,7 @@ export default function LessonList({}) {
                 </div>
                 {/* 手機版排序 */}
                 <div className="filter-sort d-flex justify-content-between">
-                <div className="sort-mb d-block d-sm-none">
+                  <div className="sort-mb d-block d-sm-none">
                     <select
                       className="form-select"
                       value={dataSort}
@@ -604,7 +581,7 @@ export default function LessonList({}) {
                                         const value = e.target.value
                                         setScore(
                                           value === 'all' ? 'all' : value
-                                        ) // 不需要转换为数字，如果你在比较时也转换了
+                                        )
                                       }}
                                     />
                                     &nbsp;{v === 'all' ? '全部' : v + '星'}
@@ -693,7 +670,7 @@ export default function LessonList({}) {
                 {/* 更改為搜尋過後篩選出來的課程 */}
 
                 {isFiltered &&
-                  // 如果已经进行了筛选或搜索，渲染筛选后的 Lesson 数据
+                  // 如果已經進行了篩選或搜索，渲染篩選後的 Lesson 數據
                   data.map((v, i) => {
                     const {
                       lesson_category_name,
@@ -746,7 +723,7 @@ export default function LessonList({}) {
                   })}
 
                 {!isFiltered &&
-                  // 如果没有进行筛选或搜索，渲染原始的 Lesson 数据
+                  // 如果沒有篩選或搜索，渲染原始的 Lesson 數據
                   LessonArray.map((v, i) => {
                     const {
                       lesson_category_name,
@@ -764,7 +741,9 @@ export default function LessonList({}) {
                       sales,
                       length,
                     } = v
-                    {/* console.log(lesson_category_name) */}
+                    {
+                      /* console.log(lesson_category_name) */
+                    }
                     return (
                       <div key={id}>
                         {isSmallScreen ? (
