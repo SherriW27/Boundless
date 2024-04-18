@@ -5,8 +5,6 @@ import NavbarMb from '@/components/common/navbar-mb'
 import Footer from '@/components/common/footer'
 import Card from '@/components/lesson/lesson-card'
 import Cardrwd from '@/components/lesson/lesson-card-rwd'
-// import Lesson from '@/data/Lesson.json'
-
 import Link from 'next/link'
 import Image from 'next/image'
 import lessonHero from '@/assets/lesson-hero.jpg'
@@ -83,7 +81,8 @@ export default function LessonList({}) {
   }, [])
   // ----------------------手機版本  ----------------------
   // 主選單
-  const [showMenu, setShowMenu] = useState(false)
+    const [showMenu, setShowMenu] = useState(false)
+    //控制
   const menuMbToggle = () => {
     setShowMenu(!showMenu)
   }
@@ -110,12 +109,12 @@ export default function LessonList({}) {
     stopPropagation(e)
     setFilterVisible(!filterVisible)
   }
-  // ----------------------假資料  ----------------------
+  // ----------------------假資料----------------------
   // 資料排序
   const [dataSort, setDataSort] = useState('upToDate')
 
-  const [priceLow, setPriceLow] = useState('')
-  const [priceHigh, setPriceHigh] = useState('')
+  const [priceLow, setPriceLow] = useState(0)
+  const [priceHigh, setPriceHigh] = useState(0)
 
   //-------------------連資料庫
   const perPage = 12
@@ -175,7 +174,9 @@ export default function LessonList({}) {
   const priceRange = (priceLow, priceHigh) => {
     if (priceLow !== '' && priceHigh !== '') {
       console.log('priceLow:', priceLow)
-      console.log('priceHigh:', priceHigh)
+        console.log('priceHigh:', priceHigh)
+        console.log(typeof priceLow)
+        console.log(typeof priceHigh)
       fetch(
         `http://localhost:3005/api/lesson?priceLow=${priceLow}&priceHigh=${priceHigh}`
       )
@@ -359,19 +360,15 @@ export default function LessonList({}) {
         />
       </div>
       <div className="container position-relative">
-        {/* <NavbarMB
-          menuMbToggle={menuMbToggle}
-          className={`menu-mb d-sm-none d-flex flex-column align-items-center ${
-            showMenu ? 'menu-mb-show' : ''
-          }`}
-        /> */}
         {/* 手機版主選單/navbar */}
         <div
           className={`menu-mb d-sm-none d-flex flex-column align-items-center ${
             showMenu ? 'menu-mb-show' : ''
           }`}
         >
+          {/* 這裡可以不用三元條件運算符？ */}
           <NavbarMb />
+          {/*手機版漢堡 */}
         </div>
 
         <div className="row">
@@ -542,7 +539,8 @@ export default function LessonList({}) {
                             min={0}
                             max={priceHigh - 1}
                             onChange={(e) => {
-                              setPriceLow(e.target.value)
+                              const value = parseInt(e.target.value) // 或者使用 parseFloat
+                              setPriceLow(value) // 將轉換後的數字設置為狀態值
                             }}
                           />
                           <input
@@ -553,7 +551,8 @@ export default function LessonList({}) {
                             value={priceHigh}
                             min={priceLow + 1}
                             onChange={(e) => {
-                              setPriceHigh(e.target.value)
+                              const value = parseInt(e.target.value) // 或者使用 parseFloat
+                              setPriceHigh(value) // 將轉換後的數字設置為狀態值
                             }}
                           />
                         </div>

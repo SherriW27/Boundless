@@ -100,13 +100,13 @@ router.get('/category/:category', async (req, res) => {
 
     let queryParams = [];
 
-    // 如果 category 不是空字符串或'0'，则增加类别过滤条件
+    // 如果 category 不是空字串或'0'，則增加類別篩選條件
     if (category !== '' && category !== '0') {
       query += ' AND product.lesson_category_id = ?';
       queryParams.push(category);
     }
 
-    // 添加 GROUP BY 子句以便正确聚合 product_review 数据
+    // 新增 GROUP BY 子句以便正確聚合 product_review 數據
     query += ' GROUP BY product.id';
 
     let [lessons] = await db.execute(query, queryParams);
@@ -114,10 +114,10 @@ router.get('/category/:category', async (req, res) => {
     if (lessons.length > 0) {
       res.status(200).json(lessons);
     } else {
-      res.status(404).send({ message: '没有找到相应的信息' });
+      res.status(404).send({ message: '沒有找到相應的資訊' });
     }
   } catch (error) {
-    console.error('发生错误：', error);
+    console.error('發生錯誤：', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
